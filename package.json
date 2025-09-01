@@ -11,7 +11,8 @@
     "esm": "node --loader ts-node/esm src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "postinstall": "prisma generate"
   },
   "keywords": [],
   "author": "",
