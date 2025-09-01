@@ -141,6 +141,21 @@ export class ProductRepository {
     });
   }
 
+  // Add to ProductRepository
+  async findInventoryByProductAndStore(productId: string, storeId: string) {
+    return prisma.productInventory.findUnique({
+      where: {
+        productId_storeId: {
+          productId,
+          storeId,
+        },
+      },
+      include: {
+        product: true,
+      },
+    });
+  }
+
   // Helper to narrow and check for Prisma "not found" error
   private isPrismaNotFoundError(error: unknown): error is { code: string } {
     return (

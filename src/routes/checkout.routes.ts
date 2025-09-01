@@ -11,11 +11,31 @@ export default async function checkoutRoutes(fastify: FastifyInstance) {
         summary: "Create a checkout order",
         description:
           "Allows a customer to create an order after self-scanning products.",
+        // body: {
+        //   type: "object",
+        //   required: ["customerId", "storeId", "items", "total", "paidOnline"],
+        //   properties: {
+        //     customerId: { type: "string" },
+        //     storeId: { type: "string" },
+        //     items: {
+        //       type: "array",
+        //       items: {
+        //         type: "object",
+        //         required: ["productId", "quantity"],
+        //         properties: {
+        //           productId: { type: "string" },
+        //           quantity: { type: "number" },
+        //         },
+        //       },
+        //     },
+        //     total: { type: "number" },
+        //     paidOnline: { type: "boolean" },
+        //   },
+        // },
         body: {
           type: "object",
-          required: ["customerId", "storeId", "items", "total", "paidOnline"],
+          required: ["storeId", "items", "paidOnline"],
           properties: {
-            customerId: { type: "string" },
             storeId: { type: "string" },
             items: {
               type: "array",
@@ -28,10 +48,10 @@ export default async function checkoutRoutes(fastify: FastifyInstance) {
                 },
               },
             },
-            total: { type: "number" },
             paidOnline: { type: "boolean" },
           },
         },
+
         response: {
           201: {
             description: "Order created",
