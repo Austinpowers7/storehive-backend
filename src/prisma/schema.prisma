@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Business {
+  id                 String   @id @default(uuid())
+  name               String
+  address            String?
+  registrationNumber String?
+  ownerId            String   @unique
+  owner              User     @relation("OwnerBusiness", fields: [ownerId], references: [id])
+  stores             Store[]
+  createdAt          DateTime @default(now())
+}
+
+model Store {
+  id         String           @id @default(uuid())
+  name       String
+  businessId String
+  business   Business         @relation(fields: [businessId], references: [id])
+  users      User[]
+  orders     Order[]
+  sessions   CashierSession[]
+
+  inventories ProductInventory[]
+}
+
+model User {
+  id               String           @id @default(uuid())
+  email            String           @unique
+  password         String
+  role             Role
+  storeId          String?
+  store            Store?           @relation(fields: [storeId], references: [id])
+  business         Business?        @relation("OwnerBusiness") // same name, no fields here
+  orders           Order[]
+  sessions         CashierSession[] @relation("CashierUserSessions")
+  profiledCashiers CashierProfile[] @relation("ManagerToCashier")
+  profiledBy       CashierProfile[] @relation("CashierToManager")
+  deletedAt        DateTime?
+}
+
+model Product {
+  id          String  @id @default(uuid())
+  name        String
+  description String? // Optional product description
+  price       Float // Selling price
+  costPrice   Float // Purchase/cost price
+  unit        String? // Optional unit (e.g. "kg", "pcs", "liters")
+
+  category  String
+  barcode   String    @unique // Globally unique barcode (EAN, UPC, etc.)
+  isActive  Boolean   @default(true)
+  deletedAt DateTime?
+
+
+  createdBy String?
+  updatedBy String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  inventories ProductInventory[]
+}
+
+model ProductInventory {
+  id        String @id @default(uuid())
+  productId String
+  storeId   String
+
+  price Float
+  stock Int
+  sku   String?
+
+  product Product @relation(fields: [productId], references: [id])
+  store   Store   @relation(fields: [storeId], references: [id])
+
+  @@unique([storeId, sku]) // SKU unique per store
+  @@unique([productId, storeId]) // Store-specific inventory per product
+}
+
+model Order {
+  id               String   @id @default(uuid())
+  storeId          String
+  store            Store    @relation(fields: [storeId], references: [id])
+  customerId       String
+  customer         User     @relation(fields: [customerId], references: [id])
+  items            Json
+  total            Float
+  paidOnline       Boolean  @default(false)
+  cashierConfirmed Boolean  @default(false)
+  createdAt        DateTime @default(now())
+}
+
+model CashierSession {
+  id          String   @id @default(uuid())
+  sessionCode String   @unique
+  qrCode      String
+  cashierId   String
+  cashier     User     @relation("CashierUserSessions", fields: [cashierId], references: [id])
+  storeId     String
+  store       Store    @relation(fields: [storeId], references: [id])
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model CashierProfile {
+  id        String   @id @default(uuid())
+  managerId String
+  cashierId String
+  notes     String?
+  createdAt DateTime @default(now())
+
+  manager User @relation("ManagerToCashier", fields: [managerId], references: [id])
+  cashier User @relation("CashierToManager", fields: [cashierId], references: [id])
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  MANAGER
+  CASHIER
+  CUSTOMER
+}
