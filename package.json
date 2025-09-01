@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Shophive",
   "main": "src/server.ts",
+  "_moduleAliases": {
+    "@src": "dist"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-default": "ts-node src/server.ts",
