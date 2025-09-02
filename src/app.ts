@@ -3,6 +3,7 @@ import Fastify from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
+import cors from "@fastify/cors";
 import authRoutes from "@src/routes/auth.routes";
 import prisma from "./plugins/prisma";
 import checkoutRoutes from "@src/routes/checkout.routes";
@@ -12,6 +13,10 @@ import storeRoutes from "@src/routes/store.routes";
 
 export function buildApp() {
   const app = Fastify({ logger: true });
+
+  app.register(cors, {
+    origin: true,
+  });
 
   app.register(jwt, { secret: process.env.JWT_SECRET || "supersecret" });
   app.register(authPlugin);
