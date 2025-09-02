@@ -1,4 +1,4 @@
-// import "module-alias/register";
+import "module-alias/register";
 import Fastify from "fastify";
 import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
