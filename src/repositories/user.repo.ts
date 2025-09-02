@@ -36,11 +36,22 @@ export class UserRepository {
   }
 
   // Create a new user (soft delete not applicable here)
+  // async createUser(data: {
+  //   email: string;
+  //   password: string;
+  //   role: Role;
+  //   storeId?: string;
+  // }): Promise<User> {
+  //   return prisma.user.create({ data });
+  // }
   async createUser(data: {
     email: string;
     password: string;
     role: Role;
     storeId?: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
   }): Promise<User> {
     return prisma.user.create({ data });
   }
@@ -61,12 +72,7 @@ export class UserRepository {
     });
   }
 
-  // Optional: find all active admins
-  // async findActiveAdmins(): Promise<User[]> {
-  //   return prisma.user.findMany({
-  //     where: { role: Role.ADMIN, deletedAt: null },
-  //   });
-  // }
+  // Find all active admins
   async findActiveAdmins(): Promise<Pick<User, "id" | "email" | "role">[]> {
     return prisma.user.findMany({
       where: { role: Role.ADMIN, deletedAt: null },
@@ -74,9 +80,24 @@ export class UserRepository {
     });
   }
 
+  // Update user details
+  // async updateUser(
+  //   id: string,
+  //   data: Partial<Pick<User, "email" | "password">>
+  // ): Promise<User> {
+  //   return prisma.user.update({
+  //     where: { id },
+  //     data,
+  //   });
+  // }
   async updateUser(
     id: string,
-    data: Partial<Pick<User, "email" | "password">>
+    data: Partial<
+      Pick<
+        User,
+        "email" | "password" | "firstName" | "lastName" | "phoneNumber"
+      >
+    >
   ): Promise<User> {
     return prisma.user.update({
       where: { id },
@@ -84,10 +105,29 @@ export class UserRepository {
     });
   }
 
-  async findAllActiveUsers(): Promise<Pick<User, "id" | "email" | "role">[]> {
+  // Find all active users
+  // async findAllActiveUsers(): Promise<Pick<User, "id" | "email" | "role">[]> {
+  //   return prisma.user.findMany({
+  //     where: { deletedAt: null },
+  //     select: { id: true, email: true, role: true },
+  //   });
+  // }
+  async findAllActiveUsers(): Promise<
+    Pick<
+      User,
+      "id" | "email" | "role" | "firstName" | "lastName" | "phoneNumber"
+    >[]
+  > {
     return prisma.user.findMany({
       where: { deletedAt: null },
-      select: { id: true, email: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+      },
     });
   }
 

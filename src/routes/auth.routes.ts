@@ -25,17 +25,46 @@ export default async function authRoutes(fastify: FastifyInstance) {
         tags: ["Auth"],
         summary: "Register a new user",
 
+        // body: {
+        //   type: "object",
+        //   required: ["email", "password", "role"],
+        //   properties: {
+        //     email: { type: "string", format: "email" },
+        //     password: { type: "string", minLength: 6 },
+        //     role: {
+        //       type: "string",
+        //       // enum: ["CUSTOMER", "CASHIER", "OWNER", "ADMIN"],
+        //       enum: ROLE_TYPES,
+        //     },
+        //     storeId: { type: "string" },
+        //     businessName: {
+        //       type: "string",
+        //       description: "Required if role is OWNER",
+        //     },
+        //     address: { type: "string" },
+        //     registrationNumber: { type: "string" },
+        //   },
+        // },
         body: {
           type: "object",
-          required: ["email", "password", "role"],
+          required: [
+            "email",
+            "password",
+            "role",
+            "firstName",
+            "lastName",
+            "phoneNumber",
+          ],
           properties: {
             email: { type: "string", format: "email" },
             password: { type: "string", minLength: 6 },
             role: {
               type: "string",
-              // enum: ["CUSTOMER", "CASHIER", "OWNER", "ADMIN"],
               enum: ROLE_TYPES,
             },
+            firstName: { type: "string" },
+            lastName: { type: "string" },
+            phoneNumber: { type: "string" },
             storeId: { type: "string" },
             businessName: {
               type: "string",
@@ -54,6 +83,9 @@ export default async function authRoutes(fastify: FastifyInstance) {
               id: { type: "string" },
               email: { type: "string" },
               role: { type: "string" },
+              firstName: { type: "string" },
+              lastName: { type: "string" },
+              phoneNumber: { type: "string" },
               business: {
                 type: "object",
                 properties: {
@@ -154,10 +186,19 @@ export default async function authRoutes(fastify: FastifyInstance) {
         summary: "Create a new admin user",
         body: {
           type: "object",
-          required: ["email", "password"],
+          required: [
+            "email",
+            "password",
+            "firstName",
+            "lastName",
+            "phoneNumber",
+          ],
           properties: {
             email: { type: "string", format: "email" },
             password: { type: "string", minLength: 6 },
+            firstName: { type: "string" },
+            lastName: { type: "string" },
+            phoneNumber: { type: "string" },
           },
         },
         response: {
@@ -168,6 +209,9 @@ export default async function authRoutes(fastify: FastifyInstance) {
               id: { type: "string" },
               email: { type: "string" },
               role: { type: "string" },
+              firstName: { type: "string" },
+              lastName: { type: "string" },
+              phoneNumber: { type: "string" },
             },
           },
           403: { description: "Forbidden" },
@@ -176,10 +220,14 @@ export default async function authRoutes(fastify: FastifyInstance) {
       },
     },
     async (req, reply) => {
-      const { email, password } = req.body as {
-        email: string;
-        password: string;
-      };
+      const { email, password, firstName, lastName, phoneNumber } =
+        req.body as {
+          email: string;
+          password: string;
+          firstName: string;
+          lastName: string;
+          phoneNumber: string;
+        };
 
       // Check if user exists
       const existing = await userRepo.findByEmail(email);
@@ -193,12 +241,18 @@ export default async function authRoutes(fastify: FastifyInstance) {
         email,
         password: hashedPassword,
         role: Role.ADMIN,
+        firstName,
+        lastName,
+        phoneNumber,
       });
 
       return reply.code(201).send({
         id: newAdmin.id,
         email: newAdmin.email,
         role: newAdmin.role,
+        firstName: newAdmin.firstName,
+        lastName: newAdmin.lastName,
+        phoneNumber: newAdmin.phoneNumber,
       });
     }
   );
@@ -220,6 +274,9 @@ export default async function authRoutes(fastify: FastifyInstance) {
                 id: { type: "string" },
                 email: { type: "string" },
                 role: { type: "string" },
+                firstName: { type: "string" },
+                lastName: { type: "string" },
+                phoneNumber: { type: "string" },
                 // deletedAt: { type: ["string", "null"], format: "date-time" },
               },
             },
@@ -288,7 +345,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
         body: {
           type: "object",
           properties: {
-            email: { type: "string", format: "email" },
+            // email: { type: "string", format: "email" },
             password: { type: "string", minLength: 6 },
           },
         },
@@ -407,7 +464,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
         body: {
           type: "object",
           properties: {
-            email: { type: "string", format: "email" },
+            // email: { type: "string", format: "email" },
             password: { type: "string", minLength: 6 },
           },
         },

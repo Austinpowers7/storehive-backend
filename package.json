@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Shophive",
   "main": "src/server.ts",
-  "_moduleAliases": {
+  "_moduleAliases-prod": {
     "@src": "dist"
+  },
+  "_moduleAliases": {
+    "@src": "src"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

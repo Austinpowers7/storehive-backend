@@ -8,10 +8,14 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "baseUrl": "./src",
+    // "baseUrl": "./src",
+    "baseUrl": ".",
     "outDir": "./dist",
+    // "paths": {
+    //   "@src/*": ["*"]
+    // }
     "paths": {
-      "@src/*": ["*"]
+      "@src/*": ["src/*"]
     }
   },
   "include": [

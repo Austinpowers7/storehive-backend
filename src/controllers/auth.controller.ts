@@ -15,7 +15,14 @@ export async function createAdmin(req: FastifyRequest, reply: FastifyReply) {
     return reply.code(403).send({ error: "Access denied" });
   }
 
-  const { email, password } = req.body as { email: string; password: string };
+  // const { email, password } = req.body as { email: string; password: string };
+  const { email, password, firstName, lastName, phoneNumber } = req.body as {
+    email: string;
+    password: string;
+    firstName: string;
+    lastName: string;
+    phoneNumber: string;
+  };
 
   // Validate email/password properly here...
 
@@ -32,6 +39,9 @@ export async function createAdmin(req: FastifyRequest, reply: FastifyReply) {
       email,
       password: hashedPassword,
       role: Role.ADMIN,
+      firstName,
+      lastName,
+      phoneNumber,
     },
   });
 
@@ -46,20 +56,32 @@ export const AuthController = {
       email,
       password,
       role,
-      // storeId,
       storeId: rawStoreId, // Alias,
       businessName,
       address,
       registrationNumber,
+      firstName,
+      lastName,
+      phoneNumber,
     } = req.body as {
       email: string;
       password: string;
+      firstName: string;
+      lastName: string;
+      phoneNumber?: string;
       role: Role;
       storeId?: string;
       businessName?: string;
       address?: string;
       registrationNumber?: string;
     };
+
+    // Validate required fields manually
+    if (!firstName || !lastName || !phoneNumber) {
+      return reply.code(400).send({
+        error: "First name, last name, and phone number are required.",
+      });
+    }
 
     // Handle invalid or empty storeId safely
     const normalizedStoreId =
@@ -93,6 +115,9 @@ export const AuthController = {
             email,
             password: hashedPassword,
             role,
+            firstName,
+            lastName,
+            phoneNumber,
           },
         });
 
@@ -119,27 +144,23 @@ export const AuthController = {
       });
     }
 
-    // // Non-owner flow
-    // const user = await userRepo.createUser({
-    //   email,
-    //   password: hashedPassword,
-    //   role,
-    //   storeId,
-    // });
-
-    // return reply
-    //   .code(201)
-    //   .send({ id: user.id, email: user.email, role: user.role });
+    // Non-owner flow
 
     const userData: {
       email: string;
       password: string;
       role: Role;
+      firstName: string;
+      lastName: string;
+      phoneNumber: string;
       storeId?: string;
     } = {
       email,
       password: hashedPassword,
       role,
+      firstName,
+      lastName,
+      phoneNumber,
     };
 
     // Validate storeId if provided
