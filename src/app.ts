@@ -10,6 +10,8 @@ import checkoutRoutes from "@src/routes/checkout.routes";
 import productRoutes from "@src/routes/product.routes";
 import authPlugin from "@src/plugins/auth.plugin";
 import storeRoutes from "@src/routes/store.routes";
+import userRoutes from "@src/routes/user.routes";
+import adminRoutes from "@src/routes/admin.routes";
 
 export function buildApp() {
   const app = Fastify({ logger: true });
@@ -64,7 +66,9 @@ export function buildApp() {
   app.register(authRoutes, { prefix: "/api/auth" });
   app.register(checkoutRoutes, { prefix: "/api/checkout" });
   app.register(productRoutes, { prefix: "/api/products" });
+  app.register(userRoutes, { prefix: "/api/users" });
   app.register(storeRoutes, { prefix: "/api/stores" });
+  app.register(adminRoutes, { prefix: "/api/admins" });
 
   return app;
 }

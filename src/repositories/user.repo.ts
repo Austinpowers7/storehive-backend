@@ -15,11 +15,6 @@ const prisma = new PrismaClient();
 // Directly imports the correct User type from the Prisma schema
 type User = PrismaUser;
 
-// export class UserRepository {
-//   async findByEmail(email: string): Promise<User | null> {
-//     return prisma.user.findUnique({ where: { email } });
-//   }
-
 export class UserRepository {
   // Find user by email, only active (not soft deleted)
   async findByEmail(email: string): Promise<User | null> {
@@ -137,6 +132,15 @@ export class UserRepository {
     return prisma.user.findMany({
       where: { storeId, deletedAt: null },
       select: { id: true, email: true, role: true },
+    });
+  }
+
+  async findUserWithBusinessById(id: string) {
+    return prisma.user.findUnique({
+      where: { id },
+      include: {
+        business: true,
+      },
     });
   }
 }
