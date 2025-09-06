@@ -135,11 +135,30 @@ export class UserRepository {
     });
   }
 
-  async findUserWithBusinessById(id: string) {
-    return prisma.user.findUnique({
-      where: { id },
+  // async findUserWithBusinessAndStoresById(id: string) {
+  //   return prisma.user.findUnique({
+  //     where: { id },
+  //     include: {
+  //       business: {
+  //         include: {
+  //           stores: true,
+  //         },
+  //       },
+  //     },
+  //   });
+  // }
+  async findUserWithBusinessAndStoresById(id: string) {
+    return prisma.user.findFirst({
+      where: {
+        id,
+        deletedAt: null,
+      },
       include: {
-        business: true,
+        business: {
+          include: {
+            stores: true,
+          },
+        },
       },
     });
   }

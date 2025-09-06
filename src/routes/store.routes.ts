@@ -199,4 +199,39 @@ export default async function storeRoutes(fastify: FastifyInstance) {
     },
     StoreController.getStoreById
   );
+
+  // Get stores by Business ID
+  fastify.get(
+    "/business/:businessId/stores",
+    {
+      schema: {
+        tags: ["Store"],
+        summary: "Get all stores for a business by businessId",
+        params: {
+          type: "object",
+          properties: {
+            businessId: { type: "string" },
+          },
+          required: ["businessId"],
+        },
+        response: {
+          200: {
+            description: "Stores retrieved successfully",
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                id: { type: "string" },
+                name: { type: "string" },
+                businessId: { type: "string" },
+              },
+            },
+          },
+          400: { description: "Invalid request" },
+          500: { description: "Server error" },
+        },
+      },
+    },
+    StoreController.getStoresByBusinessId
+  );
 }

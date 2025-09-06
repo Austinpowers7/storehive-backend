@@ -40,6 +40,9 @@
 import { FastifyRequest, FastifyReply } from "fastify";
 import prisma from "@src/lib/prisma";
 import { Role } from "@prisma/client";
+import { StoreRepository } from "@src/repositories/store.repo";
+
+const storeRepo = new StoreRepository();
 
 export class StoreController {
   static async createStore(request: FastifyRequest, reply: FastifyReply) {
@@ -123,5 +126,20 @@ export class StoreController {
     }
 
     return reply.send(store);
+  }
+
+  static async getStoresByBusinessId(req: FastifyRequest, reply: FastifyReply) {
+    const businessId = (req.params as { businessId: string }).businessId;
+
+    if (!businessId) {
+      return reply.code(400).send({ error: "businessId is required" });
+    }
+
+    try {
+      const stores = await storeRepo.findByBusinessId(businessId);
+      return reply.send(stores);
+    } catch (err) {
+      return reply.code(500).send({ error: "Internal server error" });
+    }
   }
 }

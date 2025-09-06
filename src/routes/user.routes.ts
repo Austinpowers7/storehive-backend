@@ -35,6 +35,17 @@ export default async function userRoutes(fastify: FastifyInstance) {
               lastName: { type: "string" },
               phoneNumber: { type: "string" },
               storeId: { type: "string", nullable: true },
+              // business: {
+              //   type: ["object", "null"],
+              //   nullable: true,
+              //   properties: {
+              //     id: { type: "string" },
+              //     name: { type: "string" },
+              //     address: { type: "string", nullable: true },
+              //     registrationNumber: { type: "string", nullable: true },
+              //     ownerId: { type: "string" },
+              //   },
+              // },
               business: {
                 type: ["object", "null"],
                 nullable: true,
@@ -44,6 +55,17 @@ export default async function userRoutes(fastify: FastifyInstance) {
                   address: { type: "string", nullable: true },
                   registrationNumber: { type: "string", nullable: true },
                   ownerId: { type: "string" },
+                  stores: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        id: { type: "string" },
+                        name: { type: "string" },
+                        businessId: { type: "string" },
+                      },
+                    },
+                  },
                 },
               },
             },
