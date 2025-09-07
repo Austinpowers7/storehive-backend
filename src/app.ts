@@ -4,6 +4,9 @@ import swagger from "@fastify/swagger";
 import swaggerUI from "@fastify/swagger-ui";
 import jwt from "@fastify/jwt";
 import cors from "@fastify/cors";
+import path from "path";
+import fs from "fs";
+import fastifyStatic from "@fastify/static";
 import authRoutes from "@src/routes/auth.routes";
 import prisma from "./plugins/prisma";
 import checkoutRoutes from "@src/routes/checkout.routes";
@@ -22,6 +25,17 @@ export function buildApp() {
 
   app.register(jwt, { secret: process.env.JWT_SECRET || "supersecret" });
   app.register(authPlugin);
+
+  // Serve static files (including favicon)
+  app.register(fastifyStatic, {
+    root: path.join(__dirname, "../public"), // Adjust if public is elsewhere
+    prefix: "/", // Optional: serve from root
+  });
+
+  // Read your favicon file (PNG, ICO, etc.)
+  const faviconBuffer = fs.readFileSync(
+    path.join(__dirname, "../public/favicon.ico")
+  );
 
   app.register(swagger, {
     openapi: {
@@ -58,6 +72,15 @@ export function buildApp() {
     transformStaticCSP: (header) => header, // optional
     theme: {
       title: "Shophive API", // browser tab title
+      favicon: [
+        {
+          filename: "favicon.ico",
+          rel: "icon",
+          sizes: "32x32",
+          type: "image/x-icon", // or "image/png" if using PNG
+          content: faviconBuffer,
+        },
+      ],
     },
   });
 
