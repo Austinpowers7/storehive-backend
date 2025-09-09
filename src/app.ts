@@ -28,7 +28,7 @@ export function buildApp() {
 
   // Serve static files (including favicon)
   app.register(fastifyStatic, {
-    root: path.join(__dirname, "../public"), // Adjust if public is elsewhere
+    root: path.join(__dirname, "../public"),
     prefix: "/", // Optional: serve from root
   });
 

@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import { UserController } from "../controllers/user.controller";
 import { UserRepository } from "@src/repositories/user.repo";
 import { Role } from "@prisma/client";
+import prisma from "@src/lib/prisma";
+import { canAccessStore } from "@src/services/auth.service";
 
 const userRepo = new UserRepository();
 
@@ -285,17 +287,9 @@ export default async function userRoutes(fastify: FastifyInstance) {
       const { storeId } = req.params as { storeId: string };
       const currentUser = req.user;
 
-      const allowedRoles: Role[] = [Role.ADMIN, Role.OWNER, Role.MANAGER];
+      const allowed = await canAccessStore(currentUser, storeId);
 
-      if (!allowedRoles.includes(currentUser.role)) {
-        return reply.code(403).send({ error: "Access denied" });
-      }
-
-      if (
-        (currentUser.role === Role.OWNER ||
-          currentUser.role === Role.MANAGER) &&
-        currentUser.storeId !== storeId
-      ) {
+      if (!allowed) {
         return reply
           .code(403)
           .send({ error: "Access to this store is forbidden" });
