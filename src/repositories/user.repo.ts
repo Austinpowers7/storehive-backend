@@ -131,7 +131,14 @@ export class UserRepository {
   ): Promise<Pick<User, "id" | "email" | "role">[]> {
     return prisma.user.findMany({
       where: { storeId, deletedAt: null },
-      select: { id: true, email: true, role: true },
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        firstName: true,
+        lastName: true,
+        phoneNumber: true,
+      },
     });
   }
 
