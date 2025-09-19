@@ -40,7 +40,7 @@ export function buildApp() {
   app.register(swagger, {
     openapi: {
       info: {
-        title: "Shophive API",
+        title: "Storehive API",
         version: "1.0.0",
       },
       components: {
@@ -71,7 +71,7 @@ export function buildApp() {
     staticCSP: true,
     transformStaticCSP: (header) => header, // optional
     theme: {
-      title: "Shophive API", // browser tab title
+      title: "Storehive API", // browser tab title
       favicon: [
         {
           filename: "favicon.ico",
