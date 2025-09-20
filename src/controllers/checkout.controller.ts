@@ -2,7 +2,7 @@ import { FastifyRequest, FastifyReply } from "fastify";
 import { Role } from "@prisma/client";
 import { OrderRepository } from "../repositories/order.repo";
 import { ProductRepository } from "../repositories/product.repo";
-import { requireRole } from "@src/lib/auth";
+import { requireRole } from "@src/services/auth.service";
 
 const orderRepo = new OrderRepository();
 const productRepo = new ProductRepository();

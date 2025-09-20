@@ -1,5 +1,6 @@
 import { Role } from "@prisma/client";
 import prisma from "@src/lib/prisma";
+import { FastifyReply } from "fastify";
 
 export async function canAccessStore(
   user: any,
@@ -26,4 +27,16 @@ export async function canAccessStore(
   }
 
   return false;
+}
+
+export function requireRole(
+  userRole: Role,
+  allowedRoles: Role[],
+  reply: FastifyReply
+): boolean {
+  if (!allowedRoles.includes(userRole)) {
+    reply.code(403).send({ error: "Access denied" });
+    return false;
+  }
+  return true;
 }
