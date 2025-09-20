@@ -8,9 +8,8 @@
     "dev-default": "ts-node src/server.ts",
     "dev-v2(no loading tsconfig-paths)": "ts-node-dev --respawn --transpile-only src/server.ts",
     "dev": "ts-node-dev --respawn --transpile-only -r tsconfig-paths/register src/server.ts",
-    "esm": "node --loader ts-node/esm src/server.ts",
-    "start": "node -r tsconfig-paths/register dist/server.js",
-    "build": "tsc",
+    "start": "node dist/server.js",
+    "build": "tsc && tsc-alias",
     "prisma": "prisma",
     "postinstall": "prisma generate"
   },
@@ -40,7 +39,6 @@
     "fastify": "^5.4.0",
     "fastify-plugin": "^5.0.1",
     "lowdb": "^7.0.1",
-    "module-alias": "^2.2.3",
     "nanoid": "^5.1.5",
     "qrcode": "^1.5.4",
     "reflect-metadata": "^0.2.2",
@@ -48,8 +46,7 @@
     "tesseract.js": "^6.0.1",
     "typeorm": "^0.3.26",
     "typeorm-fastify-plugin": "^3.0.0",
-    "uuid": "^11.1.0",
-    "tsconfig-paths": "^4.2.0"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
@@ -62,6 +59,8 @@
     "prisma": "^6.13.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "tsc-alias": "^1.8.16",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }
