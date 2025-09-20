@@ -1,10 +1,6 @@
-// import { PrismaClient, CashierSession } from "@prisma/client";
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, CashierSession } from "@prisma/client";
 
 const prisma = new PrismaClient();
-type CashierSession = NonNullable<
-  Awaited<ReturnType<typeof prisma.cashierSession.findUnique>>
->;
 
 export class SessionRepository {
   async createSession(data: {

@@ -1,15 +1,6 @@
-// import { PrismaClient, User, Role } from "@prisma/client";
-// import { PrismaClient } from "@prisma/client";
 import { PrismaClient, Role, User as PrismaUser } from "@prisma/client";
 
 const prisma = new PrismaClient();
-//Works but but these are the cons:
-// ❌ Too verbose and complex.
-// ❌ Depends on the shape of a function return, which may change if you include relations or select fields.
-// ❌ Doesn't always guarantee the full User model unless you explicitly request all fields.
-// ❌ Could break if you change query behavior (e.g. include store, or use select).
-// type User = NonNullable<Awaited<ReturnType<typeof prisma.user.findUnique>>>;
-// type Role = NonNullable<Awaited<ReturnType<typeof prisma.role.findUnique>>>;
 
 // Alias for User type
 // Directly imports the correct User type from the Prisma schema
@@ -30,15 +21,7 @@ export class UserRepository {
     });
   }
 
-  // Create a new user (soft delete not applicable here)
-  // async createUser(data: {
-  //   email: string;
-  //   password: string;
-  //   role: Role;
-  //   storeId?: string;
-  // }): Promise<User> {
-  //   return prisma.user.create({ data });
-  // }
+  // Create a new user
   async createUser(data: {
     email: string;
     password: string;
@@ -76,15 +59,6 @@ export class UserRepository {
   }
 
   // Update user details
-  // async updateUser(
-  //   id: string,
-  //   data: Partial<Pick<User, "email" | "password">>
-  // ): Promise<User> {
-  //   return prisma.user.update({
-  //     where: { id },
-  //     data,
-  //   });
-  // }
   async updateUser(
     id: string,
     data: Partial<
@@ -101,12 +75,6 @@ export class UserRepository {
   }
 
   // Find all active users
-  // async findAllActiveUsers(): Promise<Pick<User, "id" | "email" | "role">[]> {
-  //   return prisma.user.findMany({
-  //     where: { deletedAt: null },
-  //     select: { id: true, email: true, role: true },
-  //   });
-  // }
   async findAllActiveUsers(): Promise<
     Pick<
       User,
@@ -142,18 +110,6 @@ export class UserRepository {
     });
   }
 
-  // async findUserWithBusinessAndStoresById(id: string) {
-  //   return prisma.user.findUnique({
-  //     where: { id },
-  //     include: {
-  //       business: {
-  //         include: {
-  //           stores: true,
-  //         },
-  //       },
-  //     },
-  //   });
-  // }
   async findUserWithBusinessAndStoresById(id: string) {
     return prisma.user.findFirst({
       where: {

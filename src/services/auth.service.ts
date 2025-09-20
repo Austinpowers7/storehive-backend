@@ -1,4 +1,3 @@
-// services/authorization.service.ts
 import { Role } from "@prisma/client";
 import prisma from "@src/lib/prisma";
 

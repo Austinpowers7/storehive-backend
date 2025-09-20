@@ -27,11 +27,14 @@ export class OrderRepository {
     return prisma.order.findUnique({ where: { id: orderId } });
   }
 
-  async confirmOrder(orderId: string): Promise<Order | null> {
+  async confirmOrder(
+    orderId: string,
+    cashierId: string
+  ): Promise<Order | null> {
     try {
       return await prisma.order.update({
         where: { id: orderId },
-        data: { cashierConfirmed: true },
+        data: { cashierConfirmed: true, cashierId },
       });
     } catch (error: unknown) {
       if (
@@ -45,5 +48,17 @@ export class OrderRepository {
       }
       throw error;
     }
+  }
+
+  async getOrdersByStore(storeId: string): Promise<Order[]> {
+    return prisma.order.findMany({
+      where: { storeId },
+    });
+  }
+
+  async getOrdersByCashier(cashierId: string): Promise<Order[]> {
+    return prisma.order.findMany({
+      where: { cashierId },
+    });
   }
 }

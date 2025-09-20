@@ -3,7 +3,6 @@ import bcrypt from "bcrypt";
 import { UserController } from "../controllers/user.controller";
 import { UserRepository } from "@src/repositories/user.repo";
 import { Role } from "@prisma/client";
-import prisma from "@src/lib/prisma";
 import { canAccessStore } from "@src/services/auth.service";
 
 const userRepo = new UserRepository();

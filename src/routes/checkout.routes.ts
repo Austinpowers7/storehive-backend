@@ -11,27 +11,6 @@ export default async function checkoutRoutes(fastify: FastifyInstance) {
         summary: "Create a checkout order",
         description:
           "Allows a customer to create an order after self-scanning products.",
-        // body: {
-        //   type: "object",
-        //   required: ["customerId", "storeId", "items", "total", "paidOnline"],
-        //   properties: {
-        //     customerId: { type: "string" },
-        //     storeId: { type: "string" },
-        //     items: {
-        //       type: "array",
-        //       items: {
-        //         type: "object",
-        //         required: ["productId", "quantity"],
-        //         properties: {
-        //           productId: { type: "string" },
-        //           quantity: { type: "number" },
-        //         },
-        //       },
-        //     },
-        //     total: { type: "number" },
-        //     paidOnline: { type: "boolean" },
-        //   },
-        // },
         body: {
           type: "object",
           required: ["storeId", "items", "paidOnline"],
@@ -99,5 +78,47 @@ export default async function checkoutRoutes(fastify: FastifyInstance) {
       },
     },
     CheckoutController.confirmOrder
+  );
+
+  // List orders by store (Manager or Owner only)
+  fastify.get(
+    "/store/:storeId",
+    {
+      preHandler: [fastify.authenticate],
+      schema: {
+        tags: ["Checkout"],
+        summary: "List all orders for a store",
+        description: "Only MANAGER and OWNER can view store orders.",
+        params: {
+          type: "object",
+          required: ["storeId"],
+          properties: {
+            storeId: { type: "string" },
+          },
+        },
+      },
+    },
+    CheckoutController.listOrdersByStore
+  );
+
+  // List orders by cashier (Manager or Owner only)
+  fastify.get(
+    "/cashier/:cashierId",
+    {
+      preHandler: [fastify.authenticate],
+      schema: {
+        tags: ["Checkout"],
+        summary: "List all orders confirmed by a specific cashier",
+        description: "Only MANAGER and OWNER can view cashier orders.",
+        params: {
+          type: "object",
+          required: ["cashierId"],
+          properties: {
+            cashierId: { type: "string" },
+          },
+        },
+      },
+    },
+    CheckoutController.listOrdersByCashier
   );
 }

@@ -1,45 +1,5 @@
-// import { FastifyRequest, FastifyReply } from "fastify";
-// import prisma from "@src/lib/prisma";
-
-// export class StoreController {
-//   static async createStore(request: FastifyRequest, reply: FastifyReply) {
-//     const { name } = request.body as { name: string };
-
-//     const user = request.user;
-//     if (user.role !== "ADMIN" && user.role !== "OWNER") {
-//       return reply.code(403).send({ message: "Forbidden" });
-//     }
-
-//     const store = await prisma.store.create({
-//       data: { name },
-//     });
-
-//     return reply.code(201).send(store);
-//   }
-
-//   static async listStores(_request: FastifyRequest, reply: FastifyReply) {
-//     const stores = await prisma.store.findMany();
-//     return reply.send(stores);
-//   }
-
-//   static async getStoreById(request: FastifyRequest, reply: FastifyReply) {
-//     const { storeId } = request.params as { storeId: string };
-
-//     const store = await prisma.store.findUnique({
-//       where: { id: storeId },
-//     });
-
-//     if (!store) {
-//       return reply.code(404).send({ message: "Store not found" });
-//     }
-
-//     return reply.send(store);
-//   }
-// }
-
 import { FastifyRequest, FastifyReply } from "fastify";
 import prisma from "@src/lib/prisma";
-import { Role } from "@prisma/client";
 import { StoreRepository } from "@src/repositories/store.repo";
 
 const storeRepo = new StoreRepository();

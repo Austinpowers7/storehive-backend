@@ -3,12 +3,6 @@
   "version": "1.0.0",
   "description": "Shophive",
   "main": "src/server.ts",
-  "_moduleAliases": {
-    "@src": "dist"
-  },
-  "_moduleAliases-dev": {
-    "@src": "src"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-default": "ts-node src/server.ts",
@@ -54,7 +48,8 @@
     "tesseract.js": "^6.0.1",
     "typeorm": "^0.3.26",
     "typeorm-fastify-plugin": "^3.0.0",
-    "uuid": "^11.1.0"
+    "uuid": "^11.1.0",
+    "tsconfig-paths": "^4.2.0"
   },
   "devDependencies": {
     "@types/axios": "^0.9.36",
@@ -67,7 +62,6 @@
     "prisma": "^6.13.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
-    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.9.2"
   }
 }

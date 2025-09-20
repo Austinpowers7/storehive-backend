@@ -34,8 +34,8 @@ model User {
   id               String           @id @default(uuid())
   email            String           @unique
   password         String
-  firstName        String?           
-  lastName         String?           
+  firstName        String?
+  lastName         String?
   phoneNumber      String?
   role             Role
   storeId          String?
@@ -46,6 +46,8 @@ model User {
   profiledCashiers CashierProfile[] @relation("ManagerToCashier")
   profiledBy       CashierProfile[] @relation("CashierToManager")
   deletedAt        DateTime?
+
+  cashierConfirmedOrders Order[] @relation("CashierConfirmedOrders")
 }
 
 model Product {
@@ -60,7 +62,6 @@ model Product {
   barcode   String    @unique // Globally unique barcode (EAN, UPC, etc.)
   isActive  Boolean   @default(true)
   deletedAt DateTime?
-
 
   createdBy String?
   updatedBy String?
@@ -93,6 +94,8 @@ model Order {
   store            Store    @relation(fields: [storeId], references: [id])
   customerId       String
   customer         User     @relation(fields: [customerId], references: [id])
+  cashierId        String? // nullable: set when order is confirmed
+  cashier          User?    @relation("CashierConfirmedOrders", fields: [cashierId], references: [id])
   items            Json
   total            Float
   paidOnline       Boolean  @default(false)
