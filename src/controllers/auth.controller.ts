@@ -194,7 +194,7 @@ export const AuthController = {
     const token = req.server.jwt.sign({
       id: user.id,
       email: user.email,
-      role: user.role,
+      role: user.role as Role, // Explicitly cast to role enum
       storeId: user.storeId,
     });
 

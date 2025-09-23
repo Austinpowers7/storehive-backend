@@ -9,16 +9,19 @@ export class OrderRepository {
     items: { productId: string; quantity: number }[];
     total: number;
     paidOnline: boolean;
+    cashierId?: string;
   }): Promise<Order> {
-    const { customerId, storeId, items, total, paidOnline } = data;
+    const { customerId, storeId, items, total, paidOnline, cashierId } = data;
 
     return prisma.order.create({
       data: {
         customerId,
         storeId,
-        items, // This will be saved as JSON automatically
+        items,
         total,
         paidOnline,
+        cashierId: cashierId ?? null,
+        cashierConfirmed: !!cashierId, // auto-confirm if placed by cashier
       },
     });
   }

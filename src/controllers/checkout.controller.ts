@@ -15,7 +15,11 @@ export const CheckoutController = {
       paidOnline: boolean;
     };
 
-    const user = (req as any).user as { userId: string };
+    const user = req.user as {
+      id: string;
+      role: Role;
+      storeId?: string;
+    };
 
     if (!storeId || !items?.length) {
       return reply.code(400).send({ error: "Invalid order data" });
@@ -44,12 +48,18 @@ export const CheckoutController = {
       total += inventory.price * item.quantity;
     }
 
+    const isCashier = user.role === Role.CASHIER;
+
+    const cashierId = isCashier ? user.id : undefined;
+    const customerId = !isCashier ? user.id : "walk-in-customer-id"; // if cashier creates order, assign walk-in customer
+
     const order = await orderRepo.createOrder({
-      customerId: user.userId,
+      customerId,
       storeId,
       items,
       total,
       paidOnline,
+      cashierId,
     });
 
     return reply.code(201).send(order);

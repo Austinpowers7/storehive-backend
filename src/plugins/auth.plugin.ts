@@ -1,3 +1,4 @@
+import { UserPayload } from "@src/types/generic-types";
 import { FastifyPluginAsync, FastifyRequest, FastifyReply } from "fastify";
 import fp from "fastify-plugin";
 
@@ -6,7 +7,8 @@ const authPlugin: FastifyPluginAsync = async (fastify) => {
     "authenticate",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
-        await request.jwtVerify();
+        const decoded = await request.jwtVerify<UserPayload>();
+        request.user = decoded; // now `decoded` has userId, role, etc.
       } catch (err) {
         reply
           .code(401)
