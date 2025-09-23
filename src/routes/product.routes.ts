@@ -25,7 +25,8 @@ export default async function productRoutes(fastify: FastifyInstance) {
             items: {
               type: "object",
               properties: {
-                id: { type: "string" },
+                inventoryId: { type: "string" },
+                productId: { type: "string" },
                 name: { type: "string" },
                 description: { type: "string", nullable: true },
                 price: { type: "number" },
@@ -69,7 +70,8 @@ export default async function productRoutes(fastify: FastifyInstance) {
             description: "Product object",
             type: "object",
             properties: {
-              id: { type: "string" },
+              inventoryId: { type: "string" },
+              productId: { type: "string" },
               name: { type: "string" },
               description: { type: "string", nullable: true },
               price: { type: "number" },
