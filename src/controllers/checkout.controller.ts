@@ -99,10 +99,28 @@ export const CheckoutController = {
     return reply.send({ orders });
   },
 
+  // async listOrdersByCashier(req: FastifyRequest, reply: FastifyReply) {
+  //   const { cashierId } = req.params as { cashierId: string };
+  //   const user = (req as any).user as { role: Role };
+
+  //   if (!requireRole(user.role, [Role.MANAGER, Role.OWNER], reply)) return;
+
+  //   const orders = await orderRepo.getOrdersByCashier(cashierId);
+  //   return reply.send({ orders });
+  // },
+
+  // Allow if cashier is requesting their own orders
   async listOrdersByCashier(req: FastifyRequest, reply: FastifyReply) {
     const { cashierId } = req.params as { cashierId: string };
-    const user = (req as any).user as { role: Role };
+    const user = (req as any).user as { id: string; role: Role };
 
+    // Allow if cashier is requesting their own orders
+    if (user.role === Role.CASHIER && user.id === cashierId) {
+      const orders = await orderRepo.getOrdersByCashier(cashierId);
+      return reply.send({ orders });
+    }
+
+    // For others, require MANAGER or OWNER
     if (!requireRole(user.role, [Role.MANAGER, Role.OWNER], reply)) return;
 
     const orders = await orderRepo.getOrdersByCashier(cashierId);

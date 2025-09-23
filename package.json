@@ -1,7 +1,7 @@
 {
-  "name": "shophive-backend",
+  "name": "storehive-backend",
   "version": "1.0.0",
-  "description": "Shophive",
+  "description": "Storehive",
   "main": "src/server.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
